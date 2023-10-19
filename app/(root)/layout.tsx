@@ -1,19 +1,19 @@
-import React from "react";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
+import React from 'react';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { ClerkProvider } from '@clerk/nextjs';
 
-import "../globals.css";
-import Topbar from "@/components/shared/Topbar";
-import LeftSideBar from "@/components/shared/LeftSideBar";
-import RightSideBar from "@/components/shared/RightSideBar";
-import Bottombar from "@/components/shared/Bottombar";
+import '../globals.css';
+import Topbar from '@/components/shared/Topbar';
+import LeftSideBar from '@/components/shared/LeftSideBar';
+import RightSideBar from '@/components/shared/RightSideBar';
+import Bottombar from '@/components/shared/Bottombar';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Threads",
-  description: "A Next.js 13 Meta Threads application",
+  title: 'Threads',
+  description: 'A Next.js 13 Meta Threads application',
 };
 
 export default function RootLayout({
