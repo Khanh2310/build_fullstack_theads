@@ -1,8 +1,8 @@
-"use client";
-import { sideBarLinks } from "@/constants";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+'use client';
+import { sideBarLinks } from '@/constants';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 
 const Bottombar = () => {
   const pathName = usePathname();
@@ -17,7 +17,7 @@ const Bottombar = () => {
           return (
             <Link
               href={link.route}
-              className={`${isActive && "bg-primary-500"} bottombar_link`}
+              className={`${isActive && 'bg-primary-500'} bottombar_link`}
               key={link.label}
             >
               <Image

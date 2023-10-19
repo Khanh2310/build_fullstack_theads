@@ -1,10 +1,11 @@
-"use client";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import Logo from "../../public/assets/logo.svg";
-import Logout from "../../public/assets/logout.svg";
-import { SignOutButton, SignedIn, OrganizationSwitcher } from "@clerk/nextjs";
+'use client';
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
+import Logo from '../../public/assets/logo.svg';
+import Logout from '../../public/assets/logout.svg';
+import { dark } from '@clerk/themes';
+import { SignOutButton, SignedIn, OrganizationSwitcher } from '@clerk/nextjs';
 
 const Topbar = () => {
   const isUserLoggedIn = true;
@@ -26,8 +27,9 @@ const Topbar = () => {
         </div>
         <OrganizationSwitcher
           appearance={{
+            baseTheme: dark,
             elements: {
-              organizationSwitcherTrigger: "py-2 px-4",
+              organizationSwitcherTrigger: 'py-2 px-4',
             },
           }}
         />
