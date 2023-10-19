@@ -17,8 +17,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Textarea } from '../ui/textarea';
+import { isBase64Image } from '@/lib/utils';
+import { useUploadThing } from '@/lib/uploadthing';
 interface TypeAccountProfile {
   user: {
     id: string;
@@ -32,24 +34,45 @@ interface TypeAccountProfile {
 }
 
 const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
+  const [files, setFiles] = useState<File[]>([]);
+  const { startUpload } = useUploadThing('media');
   const form = useForm({
     resolver: zodResolver(UserValidation),
     defaultValues: {
-      profile_photo: '',
-      name: '',
-      username: '',
-      bio: '',
+      profile_photo: user?.image || '',
+      name: user?.name || '',
+      username: user?.username || '',
+      bio: user?.bio || '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof UserValidation>) {
-    console.log(values);
-  }
+  const onSubmit = async (values: z.infer<typeof UserValidation>) => {
+    const blob = values.profile_photo;
+    const hasImageChanged = isBase64Image(blob);
+    if (hasImageChanged) {
+      const imgRes = await startUpload(files);
+      if (imgRes && imgRes[0].url) {
+        values.profile_photo = imgRes[0].url;
+      }
+    }
+  };
   const handleImage = (
-    e: ChangeEvent,
+    e: ChangeEvent<HTMLInputElement>,
     fieldChange: (value: string) => void
   ) => {
     e.preventDefault();
+    // FileReader API to read the image files and preview them.
+    const filesImages = new FileReader();
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setFiles(Array.from(e.target.files));
+      if (!file.type.includes('image')) return;
+      filesImages.onload = async (event) => {
+        const imageDataUrl = event.target?.result?.toString() || '';
+        fieldChange(imageDataUrl);
+      };
+      filesImages.readAsDataURL(file);
+    }
   };
   return (
     <Form {...form}>
@@ -86,6 +109,7 @@ const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
                 <Input
                   type="file"
                   accept="image/*"
+                  multiple
                   placeholder="upload a photo"
                   className="account-form_image-input"
                   onChange={(e) => handleImage(e, field.onChange)}
@@ -99,7 +123,7 @@ const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem className="flex w-full gap-3">
+            <FormItem className="flex flex-col w-full gap-3">
               <FormLabel className="text-base-semibold text-light-2">
                 Name
               </FormLabel>
@@ -118,9 +142,9 @@ const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
           control={form.control}
           name="username"
           render={({ field }) => (
-            <FormItem className="flex items-center gap-3 w-full">
+            <FormItem className="flex flex-col gap-3 w-full">
               <FormLabel className="text-base-semibold text-light-2">
-                User Name
+                Username
               </FormLabel>
               <FormControl className="flex-1 text-base-semibold text-gray-200">
                 <Input
@@ -137,9 +161,9 @@ const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
           control={form.control}
           name="bio"
           render={({ field }) => (
-            <FormItem className="flex items-center gap-3 w-full">
+            <FormItem className="flex flex-col gap-3 w-full">
               <FormLabel className="text-base-semibold text-light-2">
-                User Name
+                Bio
               </FormLabel>
               <FormControl className="flex-1 text-base-semibold text-gray-200">
                 <Textarea
