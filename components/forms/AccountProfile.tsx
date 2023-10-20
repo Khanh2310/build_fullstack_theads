@@ -21,6 +21,8 @@ import { ChangeEvent, useState } from 'react';
 import { Textarea } from '../ui/textarea';
 import { isBase64Image } from '@/lib/utils';
 import { useUploadThing } from '@/lib/uploadthing';
+import { updateUser } from '@/lib/actions/user.actions';
+import { usePathname, useRouter } from 'next/navigation';
 interface TypeAccountProfile {
   user: {
     id: string;
@@ -36,6 +38,8 @@ interface TypeAccountProfile {
 const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
   const [files, setFiles] = useState<File[]>([]);
   const { startUpload } = useUploadThing('media');
+  const router = useRouter();
+  const pathname = usePathname();
   const form = useForm({
     resolver: zodResolver(UserValidation),
     defaultValues: {
@@ -55,6 +59,20 @@ const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
         values.profile_photo = imgRes[0].url;
       }
     }
+
+    await updateUser({
+      userId: user.id,
+      username: values.username,
+      name: values.name,
+      image: values.profile_photo,
+      bio: values.bio,
+      path: pathname,
+    });
+    if (pathname === '/profile/edit') {
+      router.back();
+    } else {
+      router.push('/');
+    }
   };
   const handleImage = (
     e: ChangeEvent<HTMLInputElement>,
@@ -62,6 +80,7 @@ const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
   ) => {
     e.preventDefault();
     // FileReader API to read the image files and preview them.
+
     const filesImages = new FileReader();
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
