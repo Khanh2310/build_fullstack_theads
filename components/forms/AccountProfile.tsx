@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useForm } from 'react-hook-form';
-import { UserValidation } from '@/lib/schema/user';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Image from 'next/image';
-import imageProfile from '../../public/assets/profile.svg';
-import * as z from 'zod';
+import { useForm } from "react-hook-form";
+import { UserValidation } from "@/lib/schema/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
+import imageProfile from "../../public/assets/profile.svg";
+import * as z from "zod";
 import {
   Form,
   FormControl,
@@ -14,15 +14,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
-import { ChangeEvent, useState } from 'react';
-import { Textarea } from '../ui/textarea';
-import { isBase64Image } from '@/lib/utils';
-import { useUploadThing } from '@/lib/uploadthing';
-import { updateUser } from '@/lib/actions/user.actions';
-import { usePathname, useRouter } from 'next/navigation';
+} from "@/components/ui/form";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { ChangeEvent, useState } from "react";
+import { Textarea } from "../ui/textarea";
+import { isBase64Image } from "@/lib/utils";
+import { useUploadThing } from "@/lib/uploadthing";
+import { updateUser } from "@/lib/actions/user.actions";
+import { usePathname, useRouter } from "next/navigation";
 interface TypeAccountProfile {
   user: {
     id: string;
@@ -37,16 +37,16 @@ interface TypeAccountProfile {
 
 const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
   const [files, setFiles] = useState<File[]>([]);
-  const { startUpload } = useUploadThing('media');
+  const { startUpload } = useUploadThing("media");
   const router = useRouter();
   const pathname = usePathname();
   const form = useForm({
     resolver: zodResolver(UserValidation),
     defaultValues: {
-      profile_photo: user?.image || '',
-      name: user?.name || '',
-      username: user?.username || '',
-      bio: user?.bio || '',
+      profile_photo: user?.image || "",
+      name: user?.name || "",
+      username: user?.username || "",
+      bio: user?.bio || "",
     },
   });
 
@@ -61,17 +61,17 @@ const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
     }
 
     await updateUser({
+      name: values.name,
+      path: pathname,
       userId: user.id,
       username: values.username,
-      name: values.name,
-      image: values.profile_photo,
       bio: values.bio,
-      path: pathname,
+      image: values.profile_photo,
     });
-    if (pathname === '/profile/edit') {
+    if (pathname === "/profile/edit") {
       router.back();
     } else {
-      router.push('/');
+      router.push("/");
     }
   };
   const handleImage = (
@@ -85,9 +85,9 @@ const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       setFiles(Array.from(e.target.files));
-      if (!file.type.includes('image')) return;
+      if (!file.type.includes("image")) return;
       filesImages.onload = async (event) => {
-        const imageDataUrl = event.target?.result?.toString() || '';
+        const imageDataUrl = event.target?.result?.toString() || "";
         fieldChange(imageDataUrl);
       };
       filesImages.readAsDataURL(file);
@@ -134,6 +134,7 @@ const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
                   onChange={(e) => handleImage(e, field.onChange)}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -153,6 +154,7 @@ const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -172,6 +174,7 @@ const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -191,6 +194,7 @@ const AccountProfile = ({ user, btnTitle }: TypeAccountProfile) => {
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

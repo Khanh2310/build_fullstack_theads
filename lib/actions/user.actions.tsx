@@ -1,10 +1,10 @@
-'use server';
+"use server";
 
-import { revalidatePath } from 'next/cache';
-import User from '../models/user.model';
-import { connectToDB } from '../mongoose';
+import { revalidatePath } from "next/cache";
+import User from "../models/user.model";
+import { connectToDB } from "../mongoose";
 
-interface Users {
+interface Params {
   userId: string;
   username: string;
   name: string;
@@ -16,10 +16,10 @@ export async function updateUser({
   userId,
   username,
   name,
-  image,
   bio,
+  image,
   path,
-}: Users): Promise<void> {
+}: Params): Promise<void> {
   connectToDB();
   try {
     await User.findOneAndUpdate(
@@ -27,10 +27,23 @@ export async function updateUser({
       { username: username.toLowerCase(), name, bio, image, onboarded: true },
       { upsert: true }
     );
-    if (path === '/profile/edit') {
+    if (path === "/profile/edit") {
       revalidatePath(path);
     }
   } catch (error: any) {
     throw new Error(`Failed to create/update user: ${error.message}`);
+  }
+}
+
+export async function getUser(userId: string) {
+  try {
+    connectToDB();
+    return await User.findOne({ id: userId });
+    // .populate({
+    //   path: "communities",
+    //   model: Community,
+    // });
+  } catch (error: any) {
+    throw new Error(`Failed to getUser: ${error.massage}`);
   }
 }
