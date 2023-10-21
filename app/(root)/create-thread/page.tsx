@@ -6,6 +6,7 @@ async function Page() {
   const user = await currentUser();
   if (!user) return null;
   const userInfo = await getUser(user.id);
+  console.log(user);
   if (!userInfo?.onboarded) redirect("/onboarding");
   return (
     <>
