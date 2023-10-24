@@ -1,0 +1,5 @@
+{
+  "ext": "js,jsx,ts,tsx,json,css,scss,html",
+  "ignore": ["node_modules"],
+  "exec": "next dev"
+}
