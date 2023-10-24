@@ -11,6 +11,7 @@ interface Params {
   communityId: string | null;
   path: string;
 }
+
 export async function createThread({
   text,
   author,
@@ -57,9 +58,11 @@ export async function getThread(pageNumber = 1, pageSize = 20) {
         select: '_id name parentId image',
       },
     });
+
   const totalPostCount = await Thread.countDocuments({
     parentId: { $in: [null, undefined] },
   });
+
   const posts = await postQuery.exec();
   const isNext = totalPostCount > skipAmount + posts.length;
   return { posts, isNext };

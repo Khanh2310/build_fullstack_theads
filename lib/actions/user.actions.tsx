@@ -1,8 +1,8 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
-import User from "../models/user.model";
-import { connectToDB } from "../mongoose";
+import { revalidatePath } from 'next/cache';
+import User from '../models/user.model';
+import { connectToDB } from '../mongoose';
 
 interface Params {
   userId: string;
@@ -27,7 +27,7 @@ export async function updateUser({
       { username: username.toLowerCase(), name, bio, image, onboarded: true },
       { upsert: true }
     );
-    if (path === "/profile/edit") {
+    if (path === '/profile/edit') {
       revalidatePath(path);
     }
   } catch (error: any) {
@@ -37,12 +37,9 @@ export async function updateUser({
 
 export async function getUser(userId: string) {
   try {
+    // Connect DB
     connectToDB();
     return await User.findOne({ id: userId });
-    // .populate({
-    //   path: "communities",
-    //   model: Community,
-    // });
   } catch (error: any) {
     throw new Error(`Failed to getUser: ${error.massage}`);
   }
