@@ -1,17 +1,17 @@
-import PostThread from '@/components/forms/PostThread';
 import { getUser } from '@/lib/actions/user.actions';
 import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
-async function Page() {
+import React from 'react';
+
+const Page = async ({ profileInfor }: { profileInfor: { id: string } }) => {
   const user = await currentUser();
   if (!user) return null;
-  const userInfo = await getUser(user.id);
+
+  const userInfo = await getUser(profileInfor.id);
+
   if (!userInfo?.onboarded) redirect('/onboarding');
-  return (
-    <>
-      <h1 className="head-text">Create Thread</h1>
-      <PostThread userId={userInfo._id} />
-    </>
-  );
-}
+
+  return <section className="text-light-1">Profile</section>;
+};
+
 export default Page;
