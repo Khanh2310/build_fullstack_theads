@@ -12,7 +12,6 @@ const Page = async ({ params }: { params: { id: string } }) => {
   const userInfor = await getUser(user.id);
   if (!userInfor?.onboarded) redirect('/onboarding');
   const thread = await getThreadById(params.id);
-  console.log('abc', thread);
   return (
     <section className="relative">
       <div className="">
@@ -31,9 +30,26 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <div className="mt-7">
           <Comments
             threadId={thread.id}
-            currentUserImg={user.imageUrl}
+            currentUserImg={userInfor.image}
             currentUserId={JSON.stringify(userInfor._id)}
           />
+        </div>
+
+        <div className="mt-10">
+          {thread.children.map((childrenItem: any) => (
+            <Cards
+              key={childrenItem._id}
+              id={childrenItem._id}
+              currentUserId={childrenItem?.id}
+              parentId={childrenItem.parentId}
+              content={childrenItem.text}
+              author={childrenItem.author}
+              community={childrenItem.community}
+              createAt={childrenItem.createAt}
+              commnents={childrenItem.children}
+              isComment
+            />
+          ))}
         </div>
       </div>
     </section>
