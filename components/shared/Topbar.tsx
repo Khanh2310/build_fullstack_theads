@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import Logo from '../../public/assets/logothreads.svg';
+import Logo from '../../public/assets/logotheads.svg';
 import Logout from '../../public/assets/logout.svg';
 import { dark } from '@clerk/themes';
 import { SignOutButton, SignedIn, OrganizationSwitcher } from '@clerk/nextjs';
