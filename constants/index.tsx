@@ -4,6 +4,12 @@ import imageHeart from '../public/assets/heart.svg';
 import imageCreate from '../public/assets/create.svg';
 import imageCommunity from '../public/assets/community.svg';
 import imageUser from '../public/assets/user.svg';
+import iconReply from '../public/assets/reply.svg';
+import iconMembers from '../public/assets/members.svg';
+import iconTagged from '../public/assets/tag.svg';
+import iconRequests from '../public/assets/request.svg';
+
+// SideBarLinks
 export const sideBarLinks = [
   {
     imgURL: imageHome,
@@ -34,5 +40,43 @@ export const sideBarLinks = [
     imgURL: imageUser,
     route: '/profile',
     label: 'Profile',
+  },
+];
+
+// Profile Tabs
+export const profileTabs = [
+  {
+    value: 'threads',
+    label: 'Threads',
+    icon: iconReply,
+  },
+  {
+    value: 'replies',
+    label: 'Replies',
+    icon: iconMembers,
+  },
+  {
+    value: 'tagged',
+    label: 'Tagged',
+    icon: iconTagged,
+  },
+];
+
+// Community Tabs
+export const communityTags = [
+  {
+    value: 'threads',
+    label: 'Threads',
+    icon: iconReply,
+  },
+  {
+    value: 'members',
+    label: 'Members',
+    icon: iconMembers,
+  },
+  {
+    value: 'requests',
+    label: 'Requests',
+    icon: iconRequests,
   },
 ];

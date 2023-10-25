@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { Button } from "../ui/button";
+import * as z from 'zod';
+import { useForm } from 'react-hook-form';
+import { Button } from '../ui/button';
 import {
   Form,
   FormControl,
@@ -11,13 +11,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Textarea } from "../ui/textarea";
-import { zodResolver } from "@hookform/resolvers/zod";
+} from '@/components/ui/form';
+import { Textarea } from '../ui/textarea';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { usePathname, useRouter } from "next/navigation";
-import { ThreadValidation } from "@/lib/schema/thread";
-import { createThread } from "@/lib/actions/thread.action";
+import { usePathname, useRouter } from 'next/navigation';
+import { ThreadValidation } from '@/lib/schema/thread';
+import { createThread } from '@/lib/actions/thread.action';
 
 const PostThread = ({ userId }: { userId: string }) => {
   const router = useRouter();
@@ -25,7 +25,7 @@ const PostThread = ({ userId }: { userId: string }) => {
   const form = useForm({
     resolver: zodResolver(ThreadValidation),
     defaultValues: {
-      thread: "",
+      thread: '',
       accountId: userId,
     },
   });
@@ -38,7 +38,7 @@ const PostThread = ({ userId }: { userId: string }) => {
       path: pathname,
     });
 
-    router.push("/");
+    router.push('/');
   };
   return (
     <Form {...form}>
