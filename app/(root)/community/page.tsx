@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-const Page = () => {
+const Page = async () => {
   return (
     <div>
       <h1 className="text-heading1-bold text-light-1">Communities</h1>
