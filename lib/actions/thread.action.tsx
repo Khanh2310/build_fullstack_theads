@@ -123,7 +123,6 @@ export async function addComment(
       author: userId,
       parentId: threadId,
     });
-    console.log('comment', comment);
 
     // save the new thread
     const saveComment = await comment.save();
