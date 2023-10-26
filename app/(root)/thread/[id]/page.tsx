@@ -14,7 +14,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
   const thread = await getThreadById(params.id);
   return (
     <section className="relative">
-      <div className="">
+      <div>
         <Cards
           key={thread._id}
           id={thread._id}

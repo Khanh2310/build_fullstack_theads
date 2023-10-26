@@ -3,6 +3,8 @@
 import { revalidatePath } from 'next/cache';
 import User from '../models/user.model';
 import { connectToDB } from '../mongoose';
+import Thread from '../models/thread.model';
+import { FilterQuery, SortOrder } from 'mongoose';
 
 interface Params {
   userId: string;
@@ -41,5 +43,72 @@ export async function getUser(userId: string) {
     return await User.findOne({ id: userId });
   } catch (error: any) {
     throw new Error(`Failed to getUser: ${error.massage}`);
+  }
+}
+
+export async function getUserPost(userId: string) {
+  try {
+    connectToDB();
+    const threads = await User.findOne({ id: userId }).populate({
+      path: 'threads',
+      model: Thread,
+      populate: {
+        path: 'children',
+        model: Thread,
+        populate: {
+          path: 'author',
+          model: User,
+          select: 'name image id',
+        },
+      },
+    });
+    return threads;
+  } catch (error: any) {
+    throw new Error(`Failed to getUserPost ${error.massage}`);
+  }
+}
+
+export async function searchUser({
+  userId,
+  searchString = '',
+  pageNumber = 1,
+  pageSize = 20,
+  sortBy = 'desc',
+}: {
+  userId: string;
+  searchString?: string;
+  pageSize?: number;
+  pageNumber?: number;
+  sortBy?: SortOrder;
+}) {
+  try {
+    connectToDB();
+    const skipAmount = (pageNumber - 1) * pageSize;
+    const regex = new RegExp(searchString, 'i');
+
+    const query: FilterQuery<typeof User> = { id: { $ne: userId } }; // true when the values are not equivalent. false when the values are equivalent.
+
+    if (searchString.trim() !== '') {
+      //OR operation on an array of one or more
+      query.$or = [
+        { username: { $regex: regex } },
+        { name: { $regex: regex } },
+      ];
+    }
+    const sortOptions = { createAt: sortBy };
+
+    const userQuery = User.find(query)
+      .sort(sortOptions)
+      .skip(skipAmount)
+      .limit(pageSize);
+
+    const totalUserCount = await User.countDocuments(query);
+    const users = await userQuery.exec();
+
+    const isNext = totalUserCount > skipAmount + users.length;
+
+    return { users, isNext };
+  } catch (error: any) {
+    throw new Error(`Failed to getSearchUser ${error.message}`);
   }
 }

@@ -1,15 +1,17 @@
-"use client";
-import { sideBarLinks } from "@/constants";
-import Link from "next/link";
-import React from "react";
-import Image from "next/image";
-import Logout from "../../public/assets/logout.svg";
+'use client';
+import { sideBarLinks } from '@/constants';
+import Link from 'next/link';
+import React from 'react';
+import Image from 'next/image';
+import Logout from '../../public/assets/logout.svg';
 
-import { usePathname, useRouter } from "next/navigation";
-import { SignOutButton, SignedIn } from "@clerk/clerk-react";
+import { usePathname, useRouter } from 'next/navigation';
+import { SignOutButton, SignedIn } from '@clerk/clerk-react';
+import { useAuth } from '@clerk/nextjs';
 const LeftSideBar = () => {
   const pathName = usePathname();
   const router = useRouter();
+  const { userId } = useAuth();
   return (
     <section className="custom-scrollbar leftsidebar">
       <div className="flex w-full flex-1 flex-col gap-6 px-6">
@@ -19,10 +21,13 @@ const LeftSideBar = () => {
             const isActive =
               (pathName.includes(link.route) && link.route.length > 1) ||
               pathName === link.route;
+
+            if (link.route === '/profile')
+              link.route = `${link.route}/${userId}`;
             return (
               <Link
                 href={link.route}
-                className={`${isActive && "bg-primary-500"} leftsidebar_link`}
+                className={`${isActive && 'bg-primary-500'} leftsidebar_link`}
                 key={link.label}
               >
                 <Image
@@ -38,7 +43,7 @@ const LeftSideBar = () => {
       </div>
       <div className="mt-10 px-6">
         <SignedIn>
-          <SignOutButton signOutCallback={() => router.push("/sign-in")}>
+          <SignOutButton signOutCallback={() => router.push('/sign-in')}>
             <div className="flex cursor-pointer gap-4 p-4">
               <Image src={Logout} width={24} height={24} alt="logout" />
               <p className="text-light-2 max-lg:hidden">Logout</p>
