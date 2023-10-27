@@ -55,11 +55,6 @@ export const profileTabs = [
     label: 'Replies',
     icon: iconMembers,
   },
-  {
-    value: 'tagged',
-    label: 'Tagged',
-    icon: iconTagged,
-  },
 ];
 
 // Community Tabs

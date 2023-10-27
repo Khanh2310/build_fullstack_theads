@@ -1,15 +1,15 @@
-import Cards from "@/components/cards/Cards";
-import { getThread } from "@/lib/actions/thread.action";
-import { getUser } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+import Cards from '@/components/cards/Cards';
+import { getThread } from '@/lib/actions/thread.action';
+import { getUser } from '@/lib/actions/user.actions';
+import { currentUser } from '@clerk/nextjs';
+import { redirect } from 'next/navigation';
 
 export default async function Home() {
   const user = await currentUser();
   if (!user) return null;
 
   const userInfo = await getUser(user.id);
-  if (!userInfo?.onboarded) redirect("/onboarding");
+  if (!userInfo?.onboarded) redirect('/onboarding');
   const result = await getThread(1, 30);
   return (
     <div>
@@ -28,7 +28,7 @@ export default async function Home() {
                   content={post.text}
                   author={post.author}
                   community={post.community}
-                  createAt={post.createAt}
+                  createdAt={post.createAt}
                   commnents={post.children}
                 />
               ))}

@@ -1,10 +1,10 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
-import User from "../models/user.model";
-import { connectToDB } from "../mongoose";
-import Thread from "../models/thread.model";
-import { FilterQuery, SortOrder } from "mongoose";
+import { revalidatePath } from 'next/cache';
+import User from '../models/user.model';
+import { connectToDB } from '../mongoose';
+import Thread from '../models/thread.model';
+import { FilterQuery, SortOrder } from 'mongoose';
 
 interface Params {
   userId: string;
@@ -29,7 +29,7 @@ export async function updateUser({
       { username: username.toLowerCase(), name, bio, image, onboarded: true },
       { upsert: true }
     );
-    if (path === "/profile/edit") {
+    if (path === '/profile/edit') {
       revalidatePath(path);
     }
   } catch (error: any) {
@@ -50,15 +50,15 @@ export async function getUserPost(userId: string) {
   try {
     connectToDB();
     const threads = await User.findOne({ id: userId }).populate({
-      path: "threads",
+      path: 'threads',
       model: Thread,
       populate: {
-        path: "children",
+        path: 'children',
         model: Thread,
         populate: {
-          path: "author",
+          path: 'author',
           model: User,
-          select: "name image id",
+          select: 'name image id',
         },
       },
     });
@@ -70,10 +70,10 @@ export async function getUserPost(userId: string) {
 
 export async function searchUser({
   userId,
-  searchString = "",
+  searchString = '',
   pageNumber = 1,
   pageSize = 20,
-  sortBy = "desc",
+  sortBy = 'desc',
 }: {
   userId: string;
   searchString?: string;
@@ -84,11 +84,11 @@ export async function searchUser({
   try {
     connectToDB();
     const skipAmount = (pageNumber - 1) * pageSize;
-    const regex = new RegExp(searchString, "i");
+    const regex = new RegExp(searchString, 'i');
 
     const query: FilterQuery<typeof User> = { id: { $ne: userId } }; // true when the values are not equivalent. false when the values are equivalent.
 
-    if (searchString.trim() !== "") {
+    if (searchString.trim() !== '') {
       //OR operation on an array of one or more
       query.$or = [
         { username: { $regex: regex } },
@@ -124,20 +124,21 @@ export async function getActivity(userId: string) {
     const childThreadIds = userThreads.reduce((acc, userThread) => {
       return acc.concat(userThread.children);
     }, []);
-
+    console.log('childThreadIds', childThreadIds);
     // Find and return the child threads (replies) excluding the ones created by the same user
     const replies = await Thread.find({
       _id: { $in: childThreadIds },
       author: { $ne: userId }, // Exclude threads authored by the same user
     }).populate({
-      path: "author",
+      path: 'author',
       model: User,
-      select: "name image _id",
+      select: 'name image _id',
     });
+    console.log('replies', replies);
 
     return replies;
   } catch (error) {
-    console.error("Error fetching replies: ", error);
+    console.error('Error fetching replies: ', error);
     throw error;
   }
 }
