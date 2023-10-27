@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { type } from "os";
+import mongoose from 'mongoose';
+import { type } from 'os';
 
 const userSchema = new mongoose.Schema({
   id: { type: String, required: true },
@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   threads: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Thread",
+      ref: 'Thread',
     },
   ],
   onboarded: {
@@ -20,11 +20,19 @@ const userSchema = new mongoose.Schema({
   communities: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Community",
+      ref: 'Community',
     },
   ],
+  followers: {
+    type: [String],
+    default: [],
+  },
+  following: {
+    type: [String],
+    default: [],
+  },
 });
 
-const User = mongoose.models.User || mongoose.model("User", userSchema);
+const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 export default User;

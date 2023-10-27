@@ -19,7 +19,9 @@ const Page = async ({ params }: { params: { id: string } }) => {
   return (
     <>
       <Profile
+        user_Id={userInfo._id}
         accountID={userInfo.id}
+        followers={userInfo.followers}
         authUserID={user.id}
         name={userInfo.name}
         username={userInfo.username}

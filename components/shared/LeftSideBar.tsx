@@ -27,7 +27,7 @@ const LeftSideBar = () => {
             return (
               <Link
                 href={link.route}
-                className={`${isActive && 'bg-primary-500'} leftsidebar_link`}
+                className={`leftsidebar_link ${isActive && 'bg-primary-500 '} `}
                 key={link.label}
               >
                 <Image

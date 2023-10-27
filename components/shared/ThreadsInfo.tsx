@@ -35,7 +35,7 @@ const ThreadsInfo = async ({
                   }
             }
             community={item.community}
-            createAt={item.createAt}
+            createdAt={item.createAt}
             commnents={item.children}
           />
         ))
