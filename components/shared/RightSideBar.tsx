@@ -11,13 +11,6 @@ const RightSideBar = () => {
         <h3 className="text-subtle-medium text-light-1 mb-5">
           Download mobile app
         </h3>
-        <Image
-          width={170}
-          height={170}
-          src={QR}
-          alt="qr"
-          className="border border-gray-900 block p-4 rounded-lg bg-dark-4"
-        />
       </div>
     </section>
   );
