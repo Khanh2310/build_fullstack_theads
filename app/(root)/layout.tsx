@@ -13,8 +13,8 @@ import { dark } from '@clerk/themes';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Next.js 13 ',
-  description: 'A Next.js 13 application',
+  title: 'Next.js 14 ',
+  description: 'A Next.js 14 application',
 };
 
 export default function RootLayout({
